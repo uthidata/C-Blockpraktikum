@@ -1,1 +1,1 @@
-void fizzbuzz(int biggest){}
+void fizzbuzz(int biggest);
