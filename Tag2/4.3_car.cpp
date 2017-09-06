@@ -1,67 +1,47 @@
-//g++ -std=c++14 -o 4.3_car.exe 4.3_car.cpp
+#include <iomanip>//needed to set precision of output
 #include<iostream>
+#include "car.hpp"
 
-class Car{
-    
-    double remainingFuel;
-    double drivenLength;
+Car::Car(double initcap, double initfuelef):capacity(initcap), fuelEfficiency(initfuelef){
+    drivenLength=0;
+    remainingFuel=0;
+}
+bool Car::refuel (double tofuel)
+{
+    std::cout<<"Attempting to add "<<tofuel<<"l of fuel... ";
+    if(capacity<remainingFuel+tofuel){
+        std::cout<<"Not enough capacity."<<std::endl;
+        return false;
+    }
+    else{
+        std::cout<<tofuel<<"l of fuel added."<<std::endl;
+        remainingFuel+=tofuel;
+        return true;
+    }
+}
 
-public:
-    const double capacity;
-    const double fuelEfficiency;
-    Car(double initcap, double initfuelef):capacity(initcap), fuelEfficiency(initfuelef){
-        drivenLength=0;
-        remainingFuel=0;
+double Car::drive (double distance)
+{
+    std::cout<<"Attempting to drive "<<distance<<"km... ";
+    if(distance<reach()||abs(distance-reach())<0.00000001){
+        std::cout<<"Car goes ";
+        if(drivenLength>0)std::cout<<"another ";
+        std::cout<<distance<<"km."<<std::endl;
+        drivenLength+=distance;
+        remainingFuel-=distance*fuelEfficiency;
+        return distance;
+    } else if(distance>reach()){
+        std::cout<<"Not enough fuel!"<<std::endl;
+        return reach();
     }
-    bool refuel (double tofuel){
-        if(capacity<remainingFuel+tofuel)
-            return 0;
-        else
-            remainingFuel+=tofuel;
-            return 1;
-    }
-    double drive (double distance){
-        if(distance<reach()||abs(distance-reach())<0.00000001){
-            std::cout<<reach()<<" okay "<<distance<<std::endl;
-            drivenLength+=distance;
-            remainingFuel-=distance*fuelEfficiency;
-            return distance;
-        } else if(distance>reach()){
-            std::cout<<reach()<<" no way "<<distance<<std::endl;
-            return reach();
-        }
-    }
-    const double fillLevel (){
-        return remainingFuel;
-    }
-    const double reach (){
-        return remainingFuel/fuelEfficiency;
-    }
-    const double milage (){
-        return drivenLength;
-    }
-private:
-    
-};
+}
 
-int main(){
-    Car c(50.0,5.0/100.0);
-    std::cout<<c.fillLevel()<<std::endl;
-    std::cout<<c.milage()<<std::endl;
-    c.refuel(20);
-    std::cout<<c.fillLevel()<<" "<<c.reach()<<" "<<c.milage()<<std::endl;    
-    c.drive(10);
-    std::cout<<c.fillLevel()<<" "<<c.reach()<<" "<<c.milage()<<std::endl;
-    c.refuel(c.capacity-c.fillLevel());
-    std::cout<<c.fillLevel()<<" "<<c.reach()<<" "<<c.milage()<<std::endl;
-    c.drive(c.reach());
-    std::cout<<c.fillLevel()<<" "<<c.reach()<<" "<<c.milage()<<std::endl;
-    c.drive(1);
-    std::cout<<c.fillLevel()<<" "<<c.reach()<<" "<<c.milage()<<std::endl;
-    c.refuel(20);
-    std::cout<<c.fillLevel()<<" "<<c.reach()<<" "<<c.milage()<<std::endl;
-    c.refuel(c.capacity-c.fillLevel());
-    std::cout<<c.fillLevel()<<" "<<c.reach()<<" "<<c.milage()<<std::endl;
-    c.refuel(20);
-    std::cout<<c.fillLevel()<<" "<<c.reach()<<" "<<c.milage()<<std::endl;
+const double Car::fillLevel()   {return remainingFuel;}
+const double Car::reach()       {return remainingFuel/fuelEfficiency;}
+const double Car::milage()      {return drivenLength;}
+void Car::status(){
+    std::cout<<std::fixed<<std::setprecision(2);
+    std::cout<<"Car now has "<<fillLevel()<<"l of fuel. "
+    <<"It has traveled "<<milage()<<"km. "
+    <<"It can go for "<<reach()<<"km. "<<std::endl;
 }
