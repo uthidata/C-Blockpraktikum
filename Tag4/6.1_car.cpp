@@ -1,6 +1,6 @@
 #include <iomanip>//needed to set precision of output
 #include<iostream>
-#include "4.3_car.hpp"
+#include "6.1_car.hpp"
 
 Car::Car(double initcap, double initfuelef):capacity(initcap), fuelEfficiency(initfuelef){
     drivenLength=0;
@@ -44,4 +44,68 @@ void Car::status(){
     std::cout<<"Car now has "<<fillLevel()<<"l of fuel. "
     <<"It has traveled "<<milage()<<"km. "
     <<"It can go for "<<reach()<<"km. "<<std::endl;
+}
+
+void Car::honk()
+{
+    std::cout<<"Beep"<<std::endl;
+}
+
+
+
+CityCar::CityCar(double initcap, double initfuelef, double maxkg):
+Car(initcap,initfuelef),_maxkg(maxkg)
+{
+    drivenLength=0;
+    remainingFuel=0;
+    _aktuelkg = 0;
+}
+
+void CityCar::load(double kg)
+{
+    std::cout<<"Trying to load "<<kg<< "kg... ";
+    if(_aktuelkg+kg>_maxkg) std::cout<<"New load too heavy."<<std::endl;
+    else{
+        _aktuelkg+=kg;
+        std::cout<<kg<<"kg loaded."<<std::endl;
+    }
+}
+
+void CityCar::unload(double kg)
+{
+    std::cout<<"Trying to unload "<<kg<< "kg... ";
+    if(_aktuelkg-kg<0) std::cout<<"We don't even have that much to unload."<<std::endl;
+    else{
+        _aktuelkg-=kg;
+        std::cout<<kg<<"kg unloaded."<<std::endl;
+    }
+}
+
+void CityCar::honk()
+{
+    std::cout<<"Toot!"<<std::endl;
+}
+
+SportsCar::SportsCar(double initcap,double initfuelef,bool zustand):
+Car(initcap,initfuelef),_zustand(zustand)
+{
+    drivenLength=0;
+    remainingFuel=0;
+}
+
+void SportsCar::open()
+{
+    _zustand=1;
+    std::cout<<"Verdeck ist jetzt offen."<<std::endl;
+}
+
+void SportsCar::close()
+{
+    _zustand=0;
+    std::cout<<"Verdeck ist jetzt zu."<<std::endl;
+}
+
+void SportsCar::honk()
+{
+    std::cout<<"Get out of my lane!"<<std::endl;
 }
